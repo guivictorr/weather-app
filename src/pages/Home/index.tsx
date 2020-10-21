@@ -36,6 +36,66 @@ const Home: React.FC = () => {
           </p>
         </footer>
       </aside>
+      <div>
+        <main>
+          <header>
+            <button type="button">ºC</button>
+            <button type="button">ºF</button>
+          </header>
+          <section>
+            <div>
+              <p>Tomorrow</p>
+              <img src={ShowerImage} alt="Imagem do Clima" />
+              <footer>
+                <p>16ºC</p>
+                <p>11ºC</p>
+              </footer>
+            </div>
+            <div>
+              <p>Tomorrow</p>
+              <img src={ShowerImage} alt="Imagem do Clima" />
+              <footer>
+                <p>16ºC</p>
+                <p>11ºC</p>
+              </footer>
+            </div>
+            <div>
+              <p>Tomorrow</p>
+              <img src={ShowerImage} alt="Imagem do Clima" />
+              <footer>
+                <p>16ºC</p>
+                <p>11ºC</p>
+              </footer>
+            </div>
+            <div>
+              <p>Tomorrow</p>
+              <img src={ShowerImage} alt="Imagem do Clima" />
+              <footer>
+                <p>16ºC</p>
+                <p>11ºC</p>
+              </footer>
+            </div>
+            <div>
+              <p>Tomorrow</p>
+              <img src={ShowerImage} alt="Imagem do Clima" />
+              <footer>
+                <p>16ºC</p>
+                <p>11ºC</p>
+              </footer>
+            </div>
+          </section>
+          <h2>Today Highlights</h2>
+          <section className="highlights">
+            <div className="highlight">teste</div>
+            <div className="highlight">teste</div>
+            <div className="highlight">teste</div>
+            <div className="highlight">teste</div>
+          </section>
+          <footer className="devchallenges-footer">
+            Guilherme Victor @ DevChallenges.io
+          </footer>
+        </main>
+      </div>
     </Container>
   );
 };
