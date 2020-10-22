@@ -209,5 +209,38 @@ export const Highlights = styled.section`
     width: 328px;
     height: 204px;
     background: #1e213a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 30px 0;
+
+    p {
+      font-weight: 500;
+      font-size: 16px;
+      color: #e7e7eb;
+
+      & + p {
+        font-weight: bold;
+        font-size: 64px;
+        color: #e7e7eb;
+
+        span {
+          font-weight: normal;
+          font-size: 36px;
+          margin-left: 10px;
+        }
+      }
+    }
+
+    footer {
+      display: flex;
+      align-items: center;
+    }
+
+    &:nth-child(3),
+    &:nth-child(4) {
+      height: 160px;
+    }
   }
 `;

@@ -51,13 +51,71 @@ const Home: React.FC = () => {
                 <p>11ºC</p>
               </footer>
             </div>
+            <div>
+              <p>Tomorrow</p>
+              <img src={ShowerImage} alt="Imagem do Clima" />
+              <footer>
+                <p>16ºC</p>
+                <p>11ºC</p>
+              </footer>
+            </div>
+            <div>
+              <p>Tomorrow</p>
+              <img src={ShowerImage} alt="Imagem do Clima" />
+              <footer>
+                <p>16ºC</p>
+                <p>11ºC</p>
+              </footer>
+            </div>
+            <div>
+              <p>Tomorrow</p>
+              <img src={ShowerImage} alt="Imagem do Clima" />
+              <footer>
+                <p>16ºC</p>
+                <p>11ºC</p>
+              </footer>
+            </div>
+            <div>
+              <p>Tomorrow</p>
+              <img src={ShowerImage} alt="Imagem do Clima" />
+              <footer>
+                <p>16ºC</p>
+                <p>11ºC</p>
+              </footer>
+            </div>
           </CardList>
           <h2>Today Highlights</h2>
           <Highlights>
-            <div>teste</div>
-            <div>teste</div>
-            <div>teste</div>
-            <div>teste</div>
+            <div>
+              <p>Air Pressure</p>
+              <p>
+                998
+                <span>mb</span>
+              </p>
+              <footer>WWB</footer>
+            </div>
+            <div>
+              <p>Humidity</p>
+              <p>
+                84
+                <span>%</span>
+              </p>
+              <footer />
+            </div>
+            <div>
+              <p>Visibility</p>
+              <p>
+                6,4
+                <span>miles</span>
+              </p>
+            </div>
+            <div>
+              <p>Air Pressure</p>
+              <p>
+                998
+                <span>mb</span>
+              </p>
+            </div>
           </Highlights>
           <footer className="devchallenges-footer">
             Guilherme Victor @ DevChallenges.io
