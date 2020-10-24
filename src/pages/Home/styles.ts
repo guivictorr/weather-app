@@ -167,7 +167,7 @@ export const CardList = styled.section`
 
   div {
     height: 180px;
-    max-width: 120px;
+    max-width: 130px;
     display: flex;
     align-items: center;
     justify-content: space-between;

@@ -3,7 +3,9 @@ import { BiCurrentLocation } from 'react-icons/bi';
 import { MdLocationOn } from 'react-icons/md';
 import { IoMdSearch } from 'react-icons/io';
 import { CgClose } from 'react-icons/cg';
-import { format } from 'date-fns';
+
+import formatDate from '../../utils/formatDate';
+import api from '../../service/api';
 
 import {
   Container,
@@ -14,17 +16,16 @@ import {
 } from './styles';
 
 import CloudBackground from '../../assets/images/Cloud-background.png';
-import Clear from '../../assets/images/Clear.png';
-import Hail from '../../assets/images/Hail.png';
-import HeavyCloud from '../../assets/images/HeavyCloud.png';
-import HeavyRain from '../../assets/images/HeavyRain.png';
-import LightCloud from '../../assets/images/LightCloud.png';
-import LightRain from '../../assets/images/LightRain.png';
+// import Clear from '../../assets/images/Clear.png';
+// import Hail from '../../assets/images/Hail.png';
+// import HeavyCloud from '../../assets/images/HeavyCloud.png';
+// import HeavyRain from '../../assets/images/HeavyRain.png';
+// import LightCloud from '../../assets/images/LightCloud.png';
+// import LightRain from '../../assets/images/LightRain.png';
 import Shower from '../../assets/images/Shower.png';
-import Sleet from '../../assets/images/Sleet.png';
-import Snow from '../../assets/images/Snow.png';
-import ThunderStorm from '../../assets/images/Thunderstorm.png';
-import api from '../../service/api';
+// import Sleet from '../../assets/images/Sleet.png';
+// import Snow from '../../assets/images/Snow.png';
+// import ThunderStorm from '../../assets/images/Thunderstorm.png';
 
 interface WeatherDataProps {
   air_pressure: number;
@@ -43,13 +44,16 @@ interface WeatherDataProps {
 const Home: React.FC = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [weatherData, setWeatherData] = useState<WeatherDataProps[]>([]);
+  const [todayWeatherData, setTodayWeatherData] = useState<WeatherDataProps>();
   const [locationData, setLocationData] = useState({
     title: 'London',
-    woeid: 44418,
+    woeid: 2487956,
   });
 
   const getWeatherData = useCallback(async () => {
     const { data } = await api.get(`location/${locationData.woeid}`);
+    setTodayWeatherData(data.consolidated_weather[0]);
+    data.consolidated_weather.shift();
     setWeatherData(data.consolidated_weather);
   }, []);
 
@@ -57,7 +61,7 @@ const Home: React.FC = () => {
     getWeatherData();
   }, [getWeatherData]);
 
-  if (!weatherData[0]) {
+  if (!todayWeatherData || !weatherData[0]) {
     return <p>Carregando</p>;
   }
 
@@ -103,16 +107,13 @@ const Home: React.FC = () => {
               <img src={CloudBackground} alt="Nuvens" />
             </div>
             <p>
-              {weatherData[0].the_temp.toFixed()}
+              {todayWeatherData.the_temp.toFixed()}
               <span>ºC</span>
             </p>
-            <h1>{weatherData[0].weather_state_name}</h1>
+            <h1>{todayWeatherData.weather_state_name}</h1>
           </main>
           <footer>
-            <p>
-              Today •{' '}
-              {format(new Date(weatherData[0].applicable_date), 'EEE, d LLL')}
-            </p>
+            <p>Today • {formatDate(todayWeatherData.applicable_date)}</p>
             <p>
               <MdLocationOn color="#88869D" size={25} />
               {locationData.title}
@@ -128,61 +129,31 @@ const Home: React.FC = () => {
             <button type="button">ºF</button>
           </header>
           <CardList>
-            <div>
-              <p>Tomorrow</p>
-              <img src={Shower} alt="Imagem do Clima" />
-              <footer>
-                <p>16ºC</p>
-                <p>11ºC</p>
-              </footer>
-            </div>
-            <div>
-              <p>Tomorrow</p>
-              <img src={Shower} alt="Imagem do Clima" />
-              <footer>
-                <p>16ºC</p>
-                <p>11ºC</p>
-              </footer>
-            </div>
-            <div>
-              <p>Tomorrow</p>
-              <img src={Shower} alt="Imagem do Clima" />
-              <footer>
-                <p>16ºC</p>
-                <p>11ºC</p>
-              </footer>
-            </div>
-            <div>
-              <p>Tomorrow</p>
-              <img src={Shower} alt="Imagem do Clima" />
-              <footer>
-                <p>16ºC</p>
-                <p>11ºC</p>
-              </footer>
-            </div>
-            <div>
-              <p>Tomorrow</p>
-              <img src={Shower} alt="Imagem do Clima" />
-              <footer>
-                <p>16ºC</p>
-                <p>11ºC</p>
-              </footer>
-            </div>
+            {weatherData.map(weather => (
+              <div key={weather.id}>
+                <p>{formatDate(weather.applicable_date)}</p>
+                <img src={Shower} alt="Imagem do Clima" />
+                <footer>
+                  <p>{weather.max_temp.toFixed()}ºC</p>
+                  <p>{weather.min_temp.toFixed()}ºC</p>
+                </footer>
+              </div>
+            ))}
           </CardList>
           <h2>Today Highlights</h2>
           <Highlights>
             <div>
               <p>Wind Status</p>
               <p>
-                {weatherData[0].wind_speed.toFixed()}
+                {todayWeatherData.wind_speed.toFixed()}
                 <span>mph</span>
               </p>
-              <footer>{weatherData[0].wind_direction_compass}</footer>
+              <footer>{todayWeatherData.wind_direction_compass}</footer>
             </div>
             <div>
               <p>Humidity</p>
               <p>
-                {weatherData[0].humidity.toFixed()}
+                {todayWeatherData.humidity.toFixed()}
                 <span>%</span>
               </p>
               <footer />
@@ -190,14 +161,14 @@ const Home: React.FC = () => {
             <div>
               <p>Visibility</p>
               <p>
-                {weatherData[0].visibility.toFixed(1)}
+                {todayWeatherData.visibility.toFixed(1)}
                 <span>miles</span>
               </p>
             </div>
             <div>
               <p>Air Pressure</p>
               <p>
-                {weatherData[0].air_pressure.toFixed()}
+                {todayWeatherData.air_pressure.toFixed()}
                 <span>mb</span>
               </p>
             </div>
