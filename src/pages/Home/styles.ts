@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface SearchModalProps {
+  error: boolean;
+}
+
 export const Container = styled.div`
   display: flex;
   width: 100vw;
@@ -246,7 +250,7 @@ export const Highlights = styled.section`
   }
 `;
 
-export const SearchModal = styled.aside`
+export const SearchModal = styled.aside<SearchModalProps>`
   background: #1e213a;
   width: 460px;
   height: 100%;
@@ -279,7 +283,7 @@ export const SearchModal = styled.aside`
       .input-container {
         width: 268px;
         height: 48px;
-        border: 1px solid #e7e7eb;
+        border: 1px solid ${({ error }) => (error ? 'red' : '#e7e7eb')};
         margin-right: 10px;
 
         svg {

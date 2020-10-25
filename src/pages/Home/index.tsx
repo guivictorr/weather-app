@@ -42,6 +42,7 @@ interface LocationDataProps {
 const Home: React.FC = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [locationName, setLocationName] = useState('');
+  const [error, setError] = useState(false);
   const [weatherData, setWeatherData] = useState<WeatherDataProps[]>([]);
   const [todayWeatherData, setTodayWeatherData] = useState<WeatherDataProps>();
   const [locationData, setLocationData] = useState<LocationDataProps[]>([
@@ -67,6 +68,12 @@ const Home: React.FC = () => {
 
   const handleSearchData = useCallback(async () => {
     const { data } = await api.get(`location/search/?query=${locationName}`);
+
+    if (data.length === 0) {
+      setError(true);
+      return;
+    }
+    setError(false);
     setLocationData(data);
   }, [getWeatherData, locationName]);
 
@@ -84,14 +91,14 @@ const Home: React.FC = () => {
     getWeatherData(locationData[0].woeid);
   }, []);
 
-  if (!todayWeatherData || !locationData || !locationData[0]) {
+  if (!todayWeatherData || !locationData[0]) {
     return <Loading />;
   }
 
   return (
     <Container>
       {modalIsOpen ? (
-        <SearchModal>
+        <SearchModal error={error}>
           <header>
             <button
               type="button"
