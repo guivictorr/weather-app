@@ -167,7 +167,7 @@ export const CardList = styled.section`
 
   div {
     height: 180px;
-    max-width: 130px;
+    max-width: 135px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -184,6 +184,7 @@ export const CardList = styled.section`
     img {
       width: 56px;
       height: 62px;
+      object-fit: contain;
     }
 
     footer {

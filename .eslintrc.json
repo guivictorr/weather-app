@@ -46,7 +46,8 @@
     "no-console": "off",
     "camelcase": "off",
     "no-label-var": "off",
-    "dot-notation": "off"
+    "dot-notation": "off",
+    "consistent-return": "off"
   },
   "settings": {
     "import/resolver": {

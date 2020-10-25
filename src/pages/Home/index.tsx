@@ -6,6 +6,7 @@ import { CgClose } from 'react-icons/cg';
 
 import formatDate from '../../utils/formatDate';
 import api from '../../service/api';
+import weatherImg from '../../utils/weatherImages';
 
 import {
   Container,
@@ -16,16 +17,6 @@ import {
 } from './styles';
 
 import CloudBackground from '../../assets/images/Cloud-background.png';
-// import Clear from '../../assets/images/Clear.png';
-// import Hail from '../../assets/images/Hail.png';
-// import HeavyCloud from '../../assets/images/HeavyCloud.png';
-// import HeavyRain from '../../assets/images/HeavyRain.png';
-// import LightCloud from '../../assets/images/LightCloud.png';
-// import LightRain from '../../assets/images/LightRain.png';
-import Shower from '../../assets/images/Shower.png';
-// import Sleet from '../../assets/images/Sleet.png';
-// import Snow from '../../assets/images/Snow.png';
-// import ThunderStorm from '../../assets/images/Thunderstorm.png';
 
 interface WeatherDataProps {
   air_pressure: number;
@@ -37,6 +28,7 @@ interface WeatherDataProps {
   the_temp: number;
   visibility: number;
   weather_state_name: string;
+  weather_state_abbr: string;
   wind_direction_compass: string;
   wind_speed: number;
 }
@@ -46,20 +38,20 @@ const Home: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherDataProps[]>([]);
   const [todayWeatherData, setTodayWeatherData] = useState<WeatherDataProps>();
   const [locationData, setLocationData] = useState({
-    title: 'London',
+    title: 'San Francisco',
     woeid: 2487956,
   });
 
   const getWeatherData = useCallback(async () => {
     const { data } = await api.get(`location/${locationData.woeid}`);
     setTodayWeatherData(data.consolidated_weather[0]);
-    data.consolidated_weather.shift();
+    await data.consolidated_weather.shift();
     setWeatherData(data.consolidated_weather);
   }, []);
 
   useEffect(() => {
     getWeatherData();
-  }, [getWeatherData]);
+  }, []);
 
   if (!todayWeatherData || !weatherData[0]) {
     return <p>Carregando</p>;
@@ -103,7 +95,10 @@ const Home: React.FC = () => {
           </header>
           <main>
             <div>
-              <img src={Shower} alt="Clima" />
+              <img
+                src={weatherImg[todayWeatherData.weather_state_abbr]}
+                alt="Clima"
+              />
               <img src={CloudBackground} alt="Nuvens" />
             </div>
             <p>
@@ -132,7 +127,10 @@ const Home: React.FC = () => {
             {weatherData.map(weather => (
               <div key={weather.id}>
                 <p>{formatDate(weather.applicable_date)}</p>
-                <img src={Shower} alt="Imagem do Clima" />
+                <img
+                  src={weatherImg[weather.weather_state_abbr]}
+                  alt="Imagem do Clima"
+                />
                 <footer>
                   <p>{weather.max_temp.toFixed()}ºC</p>
                   <p>{weather.min_temp.toFixed()}ºC</p>
