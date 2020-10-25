@@ -17,6 +17,7 @@ import {
 } from './styles';
 
 import CloudBackground from '../../assets/images/Cloud-background.png';
+import Loading from '../../components/Loading';
 
 interface WeatherDataProps {
   air_pressure: number;
@@ -84,7 +85,7 @@ const Home: React.FC = () => {
   }, []);
 
   if (!todayWeatherData || !locationData || !locationData[0]) {
-    return <p>Carregando</p>;
+    return <Loading />;
   }
 
   return (
