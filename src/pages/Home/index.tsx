@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { BiCurrentLocation } from 'react-icons/bi';
 import { MdLocationOn } from 'react-icons/md';
 import { IoMdSearch } from 'react-icons/io';
@@ -33,27 +33,49 @@ interface WeatherDataProps {
   wind_speed: number;
 }
 
+interface LocationDataProps {
+  title: string;
+  woeid: number;
+}
+
 const Home: React.FC = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [locationName, setLocationName] = useState('');
   const [weatherData, setWeatherData] = useState<WeatherDataProps[]>([]);
   const [todayWeatherData, setTodayWeatherData] = useState<WeatherDataProps>();
-  const [locationData, setLocationData] = useState({
+  const [locationData, setLocationData] = useState<LocationDataProps>({
     title: 'San Francisco',
     woeid: 2487956,
   });
 
-  const getWeatherData = useCallback(async () => {
-    const { data } = await api.get(`location/${locationData.woeid}`);
+  const getWeatherData = useCallback(async (woeid: number) => {
+    const { data } = await api.get(`location/${woeid}`);
     setTodayWeatherData(data.consolidated_weather[0]);
     await data.consolidated_weather.shift();
     setWeatherData(data.consolidated_weather);
   }, []);
 
+  const handleInputText = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      setLocationName(event.target.value);
+    },
+    [],
+  );
+
+  const handleSearchData = useCallback(async () => {
+    const { data } = await api.get(`location/search/?query=${locationName}`);
+    await data.map(async (item: LocationDataProps) => {
+      setLocationData(item);
+      await getWeatherData(item.woeid);
+    });
+    setModalIsOpen(false);
+  }, [getWeatherData, locationName]);
+
   useEffect(() => {
-    getWeatherData();
+    getWeatherData(locationData.woeid);
   }, []);
 
-  if (!todayWeatherData || !weatherData[0]) {
+  if (!todayWeatherData || !weatherData[0] || !locationData) {
     return <p>Carregando</p>;
   }
 
@@ -72,15 +94,19 @@ const Home: React.FC = () => {
             <div>
               <div className="input-container">
                 <IoMdSearch color="background: #616475" size={25} />
-                <input type="text" placeholder="search location" />
+                <input
+                  type="text"
+                  placeholder="search location"
+                  onChange={handleInputText}
+                />
               </div>
-              <button type="button">Search</button>
+              <button type="button" onClick={handleSearchData}>
+                Search
+              </button>
             </div>
           </header>
           <ul>
-            <li>London</li>
-            <li>Dublin</li>
-            <li>Parelhas</li>
+            <li>{locationData.title}</li>
           </ul>
         </SearchModal>
       ) : (
