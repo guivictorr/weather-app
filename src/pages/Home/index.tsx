@@ -43,10 +43,12 @@ const Home: React.FC = () => {
   const [locationName, setLocationName] = useState('');
   const [weatherData, setWeatherData] = useState<WeatherDataProps[]>([]);
   const [todayWeatherData, setTodayWeatherData] = useState<WeatherDataProps>();
-  const [locationData, setLocationData] = useState<LocationDataProps>({
-    title: 'San Francisco',
-    woeid: 2487956,
-  });
+  const [locationData, setLocationData] = useState<LocationDataProps[]>([
+    {
+      title: 'San Francisco',
+      woeid: 2487956,
+    },
+  ]);
 
   const getWeatherData = useCallback(async (woeid: number) => {
     const { data } = await api.get(`location/${woeid}`);
@@ -64,18 +66,24 @@ const Home: React.FC = () => {
 
   const handleSearchData = useCallback(async () => {
     const { data } = await api.get(`location/search/?query=${locationName}`);
-    await data.map(async (item: LocationDataProps) => {
-      setLocationData(item);
-      await getWeatherData(item.woeid);
-    });
-    setModalIsOpen(false);
+    setLocationData(data);
   }, [getWeatherData, locationName]);
 
+  const handleGetLocationWeather = useCallback(
+    async (woeid: number, title: string) => {
+      setLocationData([]);
+      await getWeatherData(woeid);
+      setLocationData([{ title, woeid }]);
+      setModalIsOpen(false);
+    },
+    [],
+  );
+
   useEffect(() => {
-    getWeatherData(locationData.woeid);
+    getWeatherData(locationData[0].woeid);
   }, []);
 
-  if (!todayWeatherData || !weatherData[0] || !locationData) {
+  if (!todayWeatherData || !locationData || !locationData[0]) {
     return <p>Carregando</p>;
   }
 
@@ -106,7 +114,18 @@ const Home: React.FC = () => {
             </div>
           </header>
           <ul>
-            <li>{locationData.title}</li>
+            {locationData.map(local => (
+              <li>
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleGetLocationWeather(local.woeid, local.title)
+                  }
+                >
+                  <p>{local.title}</p>
+                </button>
+              </li>
+            ))}
           </ul>
         </SearchModal>
       ) : (
@@ -137,7 +156,7 @@ const Home: React.FC = () => {
             <p>Today • {formatDate(todayWeatherData.applicable_date)}</p>
             <p>
               <MdLocationOn color="#88869D" size={25} />
-              {locationData.title}
+              {locationData[0].title}
             </p>
           </footer>
         </SideBar>

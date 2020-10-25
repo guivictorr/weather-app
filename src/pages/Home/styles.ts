@@ -324,7 +324,6 @@ export const SearchModal = styled.aside`
       display: flex;
       align-items: center;
       padding: 23px 12px;
-      cursor: pointer;
 
       &:hover {
         border: 1px solid #616475;
@@ -332,6 +331,21 @@ export const SearchModal = styled.aside`
 
       & + li {
         margin: 10px 0;
+      }
+
+      button {
+        background: transparent;
+        font-size: 16px;
+        color: #e7e7eb;
+        border: none;
+        width: 100%;
+        padding: 23px 26px;
+        justify-content: flex-start;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        cursor: pointer;
+        outline: transparent;
       }
     }
   }
