@@ -5,7 +5,7 @@ interface SearchModalProps {
 }
 
 interface HeaderButtonProps {
-  changeTempUnit: boolean;
+  isCelsius: boolean;
 }
 
 export const Container = styled.div<HeaderButtonProps>`
@@ -41,18 +41,15 @@ export const Container = styled.div<HeaderButtonProps>`
           cursor: pointer;
           font-weight: bold;
           font-size: 18px;
-          background: ${({ changeTempUnit }) =>
-            changeTempUnit ? '#E7E7EB' : '#585676'};
-          color: ${({ changeTempUnit }) =>
-            changeTempUnit ? '#110E3C' : '#E7E7EB'};
+          background: ${({ isCelsius }) => (isCelsius ? '#E7E7EB' : '#585676')};
+          color: ${({ isCelsius }) => (isCelsius ? '#110E3C' : '#E7E7EB')};
           outline: transparent;
 
           & + button {
             margin-left: 12px;
-            background: ${({ changeTempUnit }) =>
-              changeTempUnit ? '#585676' : '#E7E7EB'};
-            color: ${({ changeTempUnit }) =>
-              changeTempUnit ? '#E7E7EB' : '#110E3C'};
+            background: ${({ isCelsius }) =>
+              isCelsius ? '#585676' : '#E7E7EB'};
+            color: ${({ isCelsius }) => (isCelsius ? '#E7E7EB' : '#110E3C')};
           }
         }
       }

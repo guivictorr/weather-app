@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useContext, useState } from 'react';
 import { BiCurrentLocation } from 'react-icons/bi';
 import { MdLocationOn } from 'react-icons/md';
 import { IoMdSearch } from 'react-icons/io';
@@ -7,6 +7,8 @@ import { CgClose } from 'react-icons/cg';
 import formatDate from '../../utils/formatDate';
 import api from '../../service/api';
 import weatherImg from '../../utils/weatherImages';
+import { WeatherContext } from '../../context/weatherData';
+import Loading from '../../components/Loading';
 
 import {
   Container,
@@ -17,25 +19,6 @@ import {
 } from './styles';
 
 import CloudBackground from '../../assets/images/Cloud-background.png';
-import Loading from '../../components/Loading';
-
-interface WeatherDataProps {
-  air_pressure: number;
-  applicable_date: string;
-  humidity: number;
-  id: number;
-  max_temp: number;
-  min_temp: number;
-  the_temp: number;
-  visibility: number;
-  weather_state_name: string;
-  weather_state_abbr: string;
-  wind_direction_compass: string;
-  wind_speed: number;
-  max_temp_f: number;
-  min_temp_f: number;
-  the_temp_f: number;
-}
 
 interface LocationDataProps {
   title: string;
@@ -43,40 +26,19 @@ interface LocationDataProps {
 }
 
 const Home: React.FC = () => {
+  const { handleGetWeatherData, todayWeatherData, weatherData } = useContext(
+    WeatherContext,
+  );
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [locationName, setLocationName] = useState('');
   const [error, setError] = useState(false);
-  const [changeTempUnit, setChangeTempUnit] = useState(false);
-  const [weatherData, setWeatherData] = useState<WeatherDataProps[]>([]);
-  const [todayWeatherData, setTodayWeatherData] = useState<WeatherDataProps>();
+  const [isCelsius, setIsCelsius] = useState(false);
   const [locationData, setLocationData] = useState<LocationDataProps[]>([
     {
       title: 'San Francisco',
       woeid: 2487956,
     },
   ]);
-
-  const getWeatherData = useCallback(async (woeid: number) => {
-    const { data } = await api.get(`location/${woeid}`);
-
-    data.consolidated_weather.map((item: WeatherDataProps) => {
-      const max_temp_f = item.max_temp * 1.8 + 32;
-      const min_temp_f = item.min_temp * 1.8 + 32;
-      const the_temp_f = item.the_temp * 1.8 + 32;
-
-      item.max_temp = Number(item.max_temp.toFixed());
-      item.min_temp = Number(item.min_temp.toFixed());
-      item.the_temp = Number(item.the_temp.toFixed());
-
-      item.max_temp_f = Number(max_temp_f.toFixed());
-      item.min_temp_f = Number(min_temp_f.toFixed());
-      item.the_temp_f = Number(the_temp_f.toFixed());
-    });
-
-    setTodayWeatherData(data.consolidated_weather[0]);
-    await data.consolidated_weather.shift();
-    setWeatherData(data.consolidated_weather);
-  }, []);
 
   const handleInputText = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
@@ -99,25 +61,19 @@ const Home: React.FC = () => {
   const handleGetLocationWeather = useCallback(
     async (woeid: number, title: string) => {
       setLocationData([]);
-      await getWeatherData(woeid);
+      await handleGetWeatherData(woeid);
       setLocationData([{ title, woeid }]);
       setModalIsOpen(false);
     },
-    [getWeatherData],
+    [handleGetWeatherData],
   );
 
-  useEffect(() => {
-    getWeatherData(locationData[0].woeid);
-  }, []);
-
-  if (!todayWeatherData || !locationData[0]) {
+  if (!locationData[0]) {
     return <Loading />;
   }
 
-  console.log(weatherData, todayWeatherData);
-
   return (
-    <Container changeTempUnit={changeTempUnit}>
+    <Container isCelsius={isCelsius}>
       {modalIsOpen ? (
         <SearchModal error={error}>
           <header>
@@ -144,7 +100,7 @@ const Home: React.FC = () => {
           </header>
           <ul>
             {locationData.map(local => (
-              <li>
+              <li key={local.woeid}>
                 <button
                   type="button"
                   onClick={() =>
@@ -176,10 +132,10 @@ const Home: React.FC = () => {
               <img src={CloudBackground} alt="Nuvens" />
             </div>
             <p>
-              {changeTempUnit
+              {isCelsius
                 ? `${todayWeatherData.the_temp_f}`
                 : `${todayWeatherData.the_temp}`}
-              <span>{changeTempUnit ? 'ºF' : 'ºC'}</span>
+              <span>{isCelsius ? 'ºF' : 'ºC'}</span>
             </p>
             <h1>{todayWeatherData.weather_state_name}</h1>
           </main>
@@ -196,10 +152,10 @@ const Home: React.FC = () => {
       <div>
         <main>
           <header>
-            <button type="button" onClick={() => setChangeTempUnit(false)}>
+            <button type="button" onClick={() => setIsCelsius(false)}>
               ºC
             </button>
-            <button type="button" onClick={() => setChangeTempUnit(true)}>
+            <button type="button" onClick={() => setIsCelsius(true)}>
               ºF
             </button>
           </header>
@@ -213,12 +169,12 @@ const Home: React.FC = () => {
                 />
                 <footer>
                   <p>
-                    {changeTempUnit
+                    {isCelsius
                       ? `${weather.max_temp_f}ºF`
                       : `${weather.max_temp}ºC`}
                   </p>
                   <p>
-                    {changeTempUnit
+                    {isCelsius
                       ? `${weather.min_temp_f}ºF`
                       : `${weather.min_temp}ºC`}
                   </p>
