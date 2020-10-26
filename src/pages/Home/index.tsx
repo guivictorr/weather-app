@@ -33,7 +33,7 @@ const Home: React.FC = () => {
   const [locationName, setLocationName] = useState('');
   const [error, setError] = useState(false);
   const [isCelsius, setIsCelsius] = useState(false);
-  const [locationData, setLocationData] = useState<LocationDataProps[]>([
+  const [locationsList, setLocationsList] = useState<LocationDataProps[]>([
     {
       title: 'San Francisco',
       woeid: 2487956,
@@ -47,7 +47,7 @@ const Home: React.FC = () => {
     [],
   );
 
-  const handleSearchData = useCallback(async () => {
+  const handleFillLocationList = useCallback(async () => {
     const { data } = await api.get(`location/search/?query=${locationName}`);
 
     if (data.length === 0) {
@@ -55,20 +55,20 @@ const Home: React.FC = () => {
       return;
     }
     setError(false);
-    setLocationData(data);
+    setLocationsList(data);
   }, [locationName]);
 
   const handleGetLocationWeather = useCallback(
     async (woeid: number, title: string) => {
-      setLocationData([]);
+      setLocationsList([]);
       await handleGetWeatherData(woeid);
-      setLocationData([{ title, woeid }]);
+      setLocationsList([{ title, woeid }]);
       setModalIsOpen(false);
     },
     [handleGetWeatherData],
   );
 
-  if (!locationData[0]) {
+  if (!locationsList[0]) {
     return <Loading />;
   }
 
@@ -93,13 +93,13 @@ const Home: React.FC = () => {
                   onChange={handleInputText}
                 />
               </div>
-              <button type="button" onClick={handleSearchData}>
+              <button type="button" onClick={handleFillLocationList}>
                 Search
               </button>
             </div>
           </header>
           <ul>
-            {locationData.map(local => (
+            {locationsList.map(local => (
               <li key={local.woeid}>
                 <button
                   type="button"
@@ -143,7 +143,7 @@ const Home: React.FC = () => {
             <p>Today • {formatDate(todayWeatherData.applicable_date)}</p>
             <p>
               <MdLocationOn color="#88869D" size={25} />
-              {locationData[0].title}
+              {locationsList[0].title}
             </p>
           </footer>
         </SideBar>

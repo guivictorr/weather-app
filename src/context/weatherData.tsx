@@ -31,7 +31,6 @@ export const WeatherContext = createContext<ContextProps>({} as ContextProps);
 export const ContextProvider: React.FC = ({ children }) => {
   const [weatherData, setWeatherData] = useState<WeatherDataProps[]>([]);
   const [todayWeatherData, setTodayWeatherData] = useState<WeatherDataProps>();
-  const [isCelsius, setIsCelsius] = useState(false);
 
   const handleGetWeatherData = useCallback(async (woeid: number) => {
     const { data } = await api.get(`location/${woeid}`);
