@@ -4,7 +4,11 @@ interface SearchModalProps {
   error: boolean;
 }
 
-export const Container = styled.div`
+interface HeaderButtonProps {
+  changeTempUnit: boolean;
+}
+
+export const Container = styled.div<HeaderButtonProps>`
   display: flex;
   width: 100vw;
   height: 100vh;
@@ -30,7 +34,6 @@ export const Container = styled.div`
         width: 100%;
 
         button {
-          background: #e7e7eb;
           border-radius: 50%;
           width: 40px;
           height: 40px;
@@ -38,10 +41,18 @@ export const Container = styled.div`
           cursor: pointer;
           font-weight: bold;
           font-size: 18px;
-          color: #110e3c;
+          background: ${({ changeTempUnit }) =>
+            changeTempUnit ? '#E7E7EB' : '#585676'};
+          color: ${({ changeTempUnit }) =>
+            changeTempUnit ? '#110E3C' : '#E7E7EB'};
+          outline: transparent;
 
           & + button {
             margin-left: 12px;
+            background: ${({ changeTempUnit }) =>
+              changeTempUnit ? '#585676' : '#E7E7EB'};
+            color: ${({ changeTempUnit }) =>
+              changeTempUnit ? '#E7E7EB' : '#110E3C'};
           }
         }
       }

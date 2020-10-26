@@ -32,6 +32,9 @@ interface WeatherDataProps {
   weather_state_abbr: string;
   wind_direction_compass: string;
   wind_speed: number;
+  max_temp_f: number;
+  min_temp_f: number;
+  the_temp_f: number;
 }
 
 interface LocationDataProps {
@@ -43,6 +46,7 @@ const Home: React.FC = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [locationName, setLocationName] = useState('');
   const [error, setError] = useState(false);
+  const [changeTempUnit, setChangeTempUnit] = useState(false);
   const [weatherData, setWeatherData] = useState<WeatherDataProps[]>([]);
   const [todayWeatherData, setTodayWeatherData] = useState<WeatherDataProps>();
   const [locationData, setLocationData] = useState<LocationDataProps[]>([
@@ -54,6 +58,21 @@ const Home: React.FC = () => {
 
   const getWeatherData = useCallback(async (woeid: number) => {
     const { data } = await api.get(`location/${woeid}`);
+
+    data.consolidated_weather.map((item: WeatherDataProps) => {
+      const max_temp_f = item.max_temp * 1.8 + 32;
+      const min_temp_f = item.min_temp * 1.8 + 32;
+      const the_temp_f = item.the_temp * 1.8 + 32;
+
+      item.max_temp = Number(item.max_temp.toFixed());
+      item.min_temp = Number(item.min_temp.toFixed());
+      item.the_temp = Number(item.the_temp.toFixed());
+
+      item.max_temp_f = Number(max_temp_f.toFixed());
+      item.min_temp_f = Number(min_temp_f.toFixed());
+      item.the_temp_f = Number(the_temp_f.toFixed());
+    });
+
     setTodayWeatherData(data.consolidated_weather[0]);
     await data.consolidated_weather.shift();
     setWeatherData(data.consolidated_weather);
@@ -75,7 +94,7 @@ const Home: React.FC = () => {
     }
     setError(false);
     setLocationData(data);
-  }, [getWeatherData, locationName]);
+  }, [locationName]);
 
   const handleGetLocationWeather = useCallback(
     async (woeid: number, title: string) => {
@@ -84,7 +103,7 @@ const Home: React.FC = () => {
       setLocationData([{ title, woeid }]);
       setModalIsOpen(false);
     },
-    [],
+    [getWeatherData],
   );
 
   useEffect(() => {
@@ -95,8 +114,10 @@ const Home: React.FC = () => {
     return <Loading />;
   }
 
+  console.log(weatherData, todayWeatherData);
+
   return (
-    <Container>
+    <Container changeTempUnit={changeTempUnit}>
       {modalIsOpen ? (
         <SearchModal error={error}>
           <header>
@@ -155,8 +176,10 @@ const Home: React.FC = () => {
               <img src={CloudBackground} alt="Nuvens" />
             </div>
             <p>
-              {todayWeatherData.the_temp.toFixed()}
-              <span>ºC</span>
+              {changeTempUnit
+                ? `${todayWeatherData.the_temp_f}`
+                : `${todayWeatherData.the_temp}`}
+              <span>{changeTempUnit ? 'ºF' : 'ºC'}</span>
             </p>
             <h1>{todayWeatherData.weather_state_name}</h1>
           </main>
@@ -173,8 +196,12 @@ const Home: React.FC = () => {
       <div>
         <main>
           <header>
-            <button type="button">ºC</button>
-            <button type="button">ºF</button>
+            <button type="button" onClick={() => setChangeTempUnit(false)}>
+              ºC
+            </button>
+            <button type="button" onClick={() => setChangeTempUnit(true)}>
+              ºF
+            </button>
           </header>
           <CardList>
             {weatherData.map(weather => (
@@ -185,8 +212,16 @@ const Home: React.FC = () => {
                   alt="Imagem do Clima"
                 />
                 <footer>
-                  <p>{weather.max_temp.toFixed()}ºC</p>
-                  <p>{weather.min_temp.toFixed()}ºC</p>
+                  <p>
+                    {changeTempUnit
+                      ? `${weather.max_temp_f}ºF`
+                      : `${weather.max_temp}ºC`}
+                  </p>
+                  <p>
+                    {changeTempUnit
+                      ? `${weather.min_temp_f}ºF`
+                      : `${weather.min_temp}ºC`}
+                  </p>
                 </footer>
               </div>
             ))}
