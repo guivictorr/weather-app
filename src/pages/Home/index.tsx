@@ -1,24 +1,16 @@
-import React, { ChangeEvent, useCallback, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { BiCurrentLocation } from 'react-icons/bi';
 import { MdLocationOn } from 'react-icons/md';
-import { IoMdSearch } from 'react-icons/io';
-import { CgClose } from 'react-icons/cg';
+import { WeatherContext } from '../../context/weatherData';
 
 import formatDate from '../../utils/formatDate';
-import api from '../../service/api';
 import weatherImg from '../../utils/weatherImages';
-import { WeatherContext } from '../../context/weatherData';
-import Loading from '../../components/Loading';
-
-import {
-  Container,
-  SideBar,
-  CardList,
-  Highlights,
-  SearchModal,
-} from './styles';
-
 import CloudBackground from '../../assets/images/Cloud-background.png';
+
+import Loading from '../../components/Loading';
+import SearchModal from '../../components/SearchModal';
+
+import { Container, SideBar, CardList, Highlights } from './styles';
 
 const Home: React.FC = () => {
   const {
@@ -26,31 +18,10 @@ const Home: React.FC = () => {
     weatherData,
     locationsList,
     modalIsOpen,
-    handleGetLocationWeather,
-    setLocationsList,
     setModalIsOpen,
   } = useContext(WeatherContext);
-  const [locationName, setLocationName] = useState('');
-  const [error, setError] = useState(false);
+
   const [isCelsius, setIsCelsius] = useState(false);
-
-  const handleInputText = useCallback(
-    async (event: ChangeEvent<HTMLInputElement>) => {
-      setLocationName(event.target.value);
-    },
-    [],
-  );
-
-  const handleFillLocationList = useCallback(async () => {
-    const { data } = await api.get(`location/search/?query=${locationName}`);
-
-    if (data.length === 0) {
-      setError(true);
-      return;
-    }
-    setError(false);
-    setLocationsList(data);
-  }, [locationName, setLocationsList]);
 
   if (!locationsList[0]) {
     return <Loading />;
@@ -59,44 +30,7 @@ const Home: React.FC = () => {
   return (
     <Container isCelsius={isCelsius}>
       {modalIsOpen ? (
-        <SearchModal error={error}>
-          <header>
-            <button
-              type="button"
-              className="close-button"
-              onClick={() => setModalIsOpen(false)}
-            >
-              <CgClose color="background: #E7E7EB" size={25} />
-            </button>
-            <div>
-              <div className="input-container">
-                <IoMdSearch color="background: #616475" size={25} />
-                <input
-                  type="text"
-                  placeholder="search location"
-                  onChange={handleInputText}
-                />
-              </div>
-              <button type="button" onClick={handleFillLocationList}>
-                Search
-              </button>
-            </div>
-          </header>
-          <ul>
-            {locationsList.map(local => (
-              <li key={local.woeid}>
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleGetLocationWeather(local.woeid, local.title)
-                  }
-                >
-                  <p>{local.title}</p>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </SearchModal>
+        <SearchModal />
       ) : (
         <SideBar>
           <header>
