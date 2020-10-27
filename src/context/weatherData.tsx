@@ -20,17 +20,34 @@ interface WeatherDataProps {
   the_temp_f: number;
 }
 
+interface LocationDataProps {
+  title: string;
+  woeid: number;
+}
+
 interface ContextProps {
   weatherData: WeatherDataProps[];
   todayWeatherData: WeatherDataProps;
+  locationsList: LocationDataProps[];
+  modalIsOpen: boolean;
   handleGetWeatherData(woeid: number): Promise<void>;
+  handleGetLocationWeather(woeid: number, title: string): Promise<void>;
+  setLocationsList(locationsList: LocationDataProps[]): void;
+  setModalIsOpen(arg: boolean): void;
 }
 
 export const WeatherContext = createContext<ContextProps>({} as ContextProps);
 
 export const ContextProvider: React.FC = ({ children }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [weatherData, setWeatherData] = useState<WeatherDataProps[]>([]);
   const [todayWeatherData, setTodayWeatherData] = useState<WeatherDataProps>();
+  const [locationsList, setLocationsList] = useState<LocationDataProps[]>([
+    {
+      title: 'San Francisco',
+      woeid: 2487956,
+    },
+  ]);
 
   const handleGetWeatherData = useCallback(async (woeid: number) => {
     const { data } = await api.get(`location/${woeid}`);
@@ -53,8 +70,18 @@ export const ContextProvider: React.FC = ({ children }) => {
     setWeatherData(data.consolidated_weather);
   }, []);
 
+  const handleGetLocationWeather = useCallback(
+    async (woeid: number, title: string) => {
+      setLocationsList([]);
+      await handleGetWeatherData(woeid);
+      setLocationsList([{ title, woeid }]);
+      setModalIsOpen(false);
+    },
+    [handleGetWeatherData],
+  );
+
   useEffect(() => {
-    handleGetWeatherData(2487956);
+    handleGetWeatherData(locationsList[0].woeid);
   }, []);
 
   if (!weatherData || !todayWeatherData) {
@@ -66,7 +93,12 @@ export const ContextProvider: React.FC = ({ children }) => {
       value={{
         weatherData,
         todayWeatherData,
+        locationsList,
+        modalIsOpen,
         handleGetWeatherData,
+        handleGetLocationWeather,
+        setLocationsList,
+        setModalIsOpen,
       }}
     >
       {children}

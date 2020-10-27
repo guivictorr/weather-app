@@ -20,25 +20,19 @@ import {
 
 import CloudBackground from '../../assets/images/Cloud-background.png';
 
-interface LocationDataProps {
-  title: string;
-  woeid: number;
-}
-
 const Home: React.FC = () => {
-  const { handleGetWeatherData, todayWeatherData, weatherData } = useContext(
-    WeatherContext,
-  );
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const {
+    todayWeatherData,
+    weatherData,
+    locationsList,
+    modalIsOpen,
+    handleGetLocationWeather,
+    setLocationsList,
+    setModalIsOpen,
+  } = useContext(WeatherContext);
   const [locationName, setLocationName] = useState('');
   const [error, setError] = useState(false);
   const [isCelsius, setIsCelsius] = useState(false);
-  const [locationsList, setLocationsList] = useState<LocationDataProps[]>([
-    {
-      title: 'San Francisco',
-      woeid: 2487956,
-    },
-  ]);
 
   const handleInputText = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
@@ -56,17 +50,7 @@ const Home: React.FC = () => {
     }
     setError(false);
     setLocationsList(data);
-  }, [locationName]);
-
-  const handleGetLocationWeather = useCallback(
-    async (woeid: number, title: string) => {
-      setLocationsList([]);
-      await handleGetWeatherData(woeid);
-      setLocationsList([{ title, woeid }]);
-      setModalIsOpen(false);
-    },
-    [handleGetWeatherData],
-  );
+  }, [locationName, setLocationsList]);
 
   if (!locationsList[0]) {
     return <Loading />;
