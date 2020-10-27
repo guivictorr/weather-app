@@ -49,6 +49,10 @@ export const Container = styled.aside`
     position: relative;
 
     div {
+      display: flex;
+      align-items: center;
+      flex: 1;
+
       img + img {
         position: absolute;
         width: 650px;

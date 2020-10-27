@@ -4,108 +4,16 @@ interface HeaderButtonProps {
   isCelsius: boolean;
 }
 
-export const Container = styled.div<HeaderButtonProps>`
+export const Container = styled.div`
   display: flex;
   width: 100vw;
   height: 100vh;
-
-  div {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    main {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-direction: column;
-      height: 90%;
-      width: 700px;
-
-      header {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        width: 100%;
-
-        button {
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
-          border: none;
-          cursor: pointer;
-          font-weight: bold;
-          font-size: 18px;
-          background: ${({ isCelsius }) => (isCelsius ? '#E7E7EB' : '#585676')};
-          color: ${({ isCelsius }) => (isCelsius ? '#110E3C' : '#E7E7EB')};
-          outline: transparent;
-
-          & + button {
-            margin-left: 12px;
-            background: ${({ isCelsius }) =>
-              isCelsius ? '#585676' : '#E7E7EB'};
-            color: ${({ isCelsius }) => (isCelsius ? '#E7E7EB' : '#110E3C')};
-          }
-        }
-      }
-
-      h2 {
-        align-self: flex-start;
-        margin-top: 40px;
-        font-size: 24px;
-      }
-
-      .devchallenges-footer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        font-size: 14px;
-        color: #616475;
-      }
-    }
-  }
 `;
 
 export const CardList = styled.section`
   display: flex;
   justify-content: space-between;
   width: 100%;
-
-  div {
-    height: 180px;
-    max-width: 135px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
-    background: #1e213a;
-    padding: 20px;
-
-    p {
-      font-weight: 500;
-      font-size: 16px;
-      color: #e7e7eb;
-    }
-
-    img {
-      width: 56px;
-      height: 62px;
-      object-fit: contain;
-    }
-
-    footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-
-      p + p {
-        color: #a09fb1;
-      }
-    }
-  }
 `;
 
 export const Highlights = styled.section`
@@ -150,6 +58,63 @@ export const Highlights = styled.section`
     &:nth-child(3),
     &:nth-child(4) {
       height: 160px;
+    }
+  }
+`;
+
+export const Wrapper = styled.div<HeaderButtonProps>`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 90%;
+    width: 700px;
+
+    header {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      width: 100%;
+
+      button {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 18px;
+        background: ${({ isCelsius }) => (isCelsius ? '#E7E7EB' : '#585676')};
+        color: ${({ isCelsius }) => (isCelsius ? '#110E3C' : '#E7E7EB')};
+        outline: transparent;
+
+        & + button {
+          margin-left: 12px;
+          background: ${({ isCelsius }) => (isCelsius ? '#585676' : '#E7E7EB')};
+          color: ${({ isCelsius }) => (isCelsius ? '#E7E7EB' : '#110E3C')};
+        }
+      }
+    }
+
+    h2 {
+      align-self: flex-start;
+      margin-top: 40px;
+      font-size: 24px;
+    }
+
+    .devchallenges-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      color: #616475;
     }
   }
 `;

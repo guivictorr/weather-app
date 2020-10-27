@@ -1,14 +1,12 @@
 import React, { useContext } from 'react';
 import { WeatherContext } from '../../context/weatherData';
 
-import formatDate from '../../utils/formatDate';
-import weatherImg from '../../utils/weatherImages';
-
 import Loading from '../../components/Loading';
 import SearchModal from '../../components/SearchModal';
 import SideBar from '../../components/SideBar';
 
-import { Container, CardList, Highlights } from './styles';
+import { Container, CardList, Highlights, Wrapper } from './styles';
+import Card from '../../components/Card';
 
 const Home: React.FC = () => {
   const {
@@ -25,10 +23,10 @@ const Home: React.FC = () => {
   }
 
   return (
-    <Container isCelsius={isCelsius}>
+    <Container>
       {modalIsOpen ? <SearchModal /> : <SideBar />}
 
-      <div>
+      <Wrapper isCelsius={isCelsius}>
         <main>
           <header>
             <button type="button" onClick={() => setIsCelsius(false)}>
@@ -40,25 +38,15 @@ const Home: React.FC = () => {
           </header>
           <CardList>
             {weatherData.map(weather => (
-              <div key={weather.id}>
-                <p>{formatDate(weather.applicable_date)}</p>
-                <img
-                  src={weatherImg[weather.weather_state_abbr]}
-                  alt="Imagem do Clima"
-                />
-                <footer>
-                  <p>
-                    {isCelsius
-                      ? `${weather.max_temp_f}ºF`
-                      : `${weather.max_temp}ºC`}
-                  </p>
-                  <p>
-                    {isCelsius
-                      ? `${weather.min_temp_f}ºF`
-                      : `${weather.min_temp}ºC`}
-                  </p>
-                </footer>
-              </div>
+              <Card
+                key={weather.id}
+                applicable_date={weather.applicable_date}
+                max_temp={weather.max_temp}
+                min_temp={weather.min_temp}
+                max_temp_f={weather.max_temp_f}
+                min_temp_f={weather.min_temp_f}
+                weather_state_abbr={weather.weather_state_abbr}
+              />
             ))}
           </CardList>
           <h2>Today Highlights</h2>
@@ -98,7 +86,7 @@ const Home: React.FC = () => {
             Guilherme Victor @ DevChallenges.io
           </footer>
         </main>
-      </div>
+      </Wrapper>
     </Container>
   );
 };

@@ -16,7 +16,6 @@ export const Container = styled.aside<SearchModalProps>`
 
   header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     flex-direction: column;
 
@@ -31,7 +30,7 @@ export const Container = styled.aside<SearchModalProps>`
     }
 
     div {
-      flex: 1;
+      display: flex;
       margin-top: 20px;
 
       .input-container {
@@ -39,17 +38,19 @@ export const Container = styled.aside<SearchModalProps>`
         height: 48px;
         border: 1px solid ${({ error }) => (error ? 'red' : '#e7e7eb')};
         margin-right: 10px;
+        align-items: center;
+        display: flex;
 
         svg {
-          width: 50px;
+          flex: 1;
         }
 
         input {
           background: transparent;
-          flex: 1;
           border: none;
           outline: none;
           color: #e7e7eb;
+          width: 80%;
 
           &::placeholder {
             font-weight: 500;
