@@ -30,6 +30,8 @@ interface ContextProps {
   todayWeatherData: WeatherDataProps;
   locationsList: LocationDataProps[];
   modalIsOpen: boolean;
+  isCelsius: boolean;
+  setIsCelsius(arg: boolean): void;
   handleGetWeatherData(woeid: number): Promise<void>;
   handleGetLocationWeather(woeid: number, title: string): Promise<void>;
   setLocationsList(locationsList: LocationDataProps[]): void;
@@ -40,6 +42,7 @@ export const WeatherContext = createContext<ContextProps>({} as ContextProps);
 
 export const ContextProvider: React.FC = ({ children }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isCelsius, setIsCelsius] = useState(false);
   const [weatherData, setWeatherData] = useState<WeatherDataProps[]>([]);
   const [todayWeatherData, setTodayWeatherData] = useState<WeatherDataProps>();
   const [locationsList, setLocationsList] = useState<LocationDataProps[]>([
@@ -95,10 +98,12 @@ export const ContextProvider: React.FC = ({ children }) => {
         todayWeatherData,
         locationsList,
         modalIsOpen,
+        isCelsius,
         handleGetWeatherData,
         handleGetLocationWeather,
         setLocationsList,
         setModalIsOpen,
+        setIsCelsius,
       }}
     >
       {children}

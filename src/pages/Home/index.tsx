@@ -1,16 +1,14 @@
-import React, { useContext, useState } from 'react';
-import { BiCurrentLocation } from 'react-icons/bi';
-import { MdLocationOn } from 'react-icons/md';
+import React, { useContext } from 'react';
 import { WeatherContext } from '../../context/weatherData';
 
 import formatDate from '../../utils/formatDate';
 import weatherImg from '../../utils/weatherImages';
-import CloudBackground from '../../assets/images/Cloud-background.png';
 
 import Loading from '../../components/Loading';
 import SearchModal from '../../components/SearchModal';
+import SideBar from '../../components/SideBar';
 
-import { Container, SideBar, CardList, Highlights } from './styles';
+import { Container, CardList, Highlights } from './styles';
 
 const Home: React.FC = () => {
   const {
@@ -18,10 +16,9 @@ const Home: React.FC = () => {
     weatherData,
     locationsList,
     modalIsOpen,
-    setModalIsOpen,
+    isCelsius,
+    setIsCelsius,
   } = useContext(WeatherContext);
-
-  const [isCelsius, setIsCelsius] = useState(false);
 
   if (!locationsList[0]) {
     return <Loading />;
@@ -29,43 +26,7 @@ const Home: React.FC = () => {
 
   return (
     <Container isCelsius={isCelsius}>
-      {modalIsOpen ? (
-        <SearchModal />
-      ) : (
-        <SideBar>
-          <header>
-            <button type="button" onClick={() => setModalIsOpen(true)}>
-              Search for places
-            </button>
-            <button type="button">
-              <BiCurrentLocation color="#E7E7EB" size={25} />
-            </button>
-          </header>
-          <main>
-            <div>
-              <img
-                src={weatherImg[todayWeatherData.weather_state_abbr]}
-                alt="Clima"
-              />
-              <img src={CloudBackground} alt="Nuvens" />
-            </div>
-            <p>
-              {isCelsius
-                ? `${todayWeatherData.the_temp_f}`
-                : `${todayWeatherData.the_temp}`}
-              <span>{isCelsius ? 'ºF' : 'ºC'}</span>
-            </p>
-            <h1>{todayWeatherData.weather_state_name}</h1>
-          </main>
-          <footer>
-            <p>Today • {formatDate(todayWeatherData.applicable_date)}</p>
-            <p>
-              <MdLocationOn color="#88869D" size={25} />
-              {locationsList[0].title}
-            </p>
-          </footer>
-        </SideBar>
-      )}
+      {modalIsOpen ? <SearchModal /> : <SideBar />}
 
       <div>
         <main>
