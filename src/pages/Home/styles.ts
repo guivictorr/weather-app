@@ -22,7 +22,7 @@ export const Highlights = styled.section`
   gap: 30px;
   width: 100%;
 
-  div {
+  article {
     width: 328px;
     height: 204px;
     background: #1e213a;

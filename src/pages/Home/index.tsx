@@ -52,36 +52,38 @@ const Home: React.FC = () => {
           </CardList>
           <h2>Today Highlights</h2>
           <Highlights>
-            <div>
+            <article>
               <p>Wind Status</p>
               <p>
                 {todayWeatherData.wind_speed.toFixed()}
                 <span>mph</span>
               </p>
               <footer>{todayWeatherData.wind_direction_compass}</footer>
-            </div>
-            <div>
+            </article>
+            <article>
               <p>Humidity</p>
               <p>
                 {todayWeatherData.humidity.toFixed()}
                 <span>%</span>
               </p>
-              <footer />
-            </div>
-            <div>
+              <footer>
+                <Progress percentage={todayWeatherData.humidity} />
+              </footer>
+            </article>
+            <article>
               <p>Visibility</p>
               <p>
                 {todayWeatherData.visibility.toFixed(1)}
                 <span>miles</span>
               </p>
-            </div>
-            <div>
+            </article>
+            <article>
               <p>Air Pressure</p>
               <p>
                 {todayWeatherData.air_pressure.toFixed()}
                 <span>mb</span>
               </p>
-            </div>
+            </article>
           </Highlights>
           <footer className="devchallenges-footer">
             Guilherme Victor @ DevChallenges.io

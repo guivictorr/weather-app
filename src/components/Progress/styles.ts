@@ -1,17 +1,21 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.div`
+interface ProgressProps {
+  percentage: number;
+}
+
+export const ProgressContainer = styled.div<ProgressProps>`
   display: flex;
   flex-direction: column;
   min-width: 230px;
 
   header {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between !important;
     align-items: center;
   }
 
-  p {
+  span {
     font-weight: bold;
     font-size: 12px;
     color: #a09fb1;
@@ -21,11 +25,22 @@ export const Container = styled.div`
     background: #e7e7eb;
     border-radius: 80px;
     width: 100%;
+    height: 8px;
+    position: relative;
+    margin: 5px 0;
 
     div {
       background: #ffec65;
-      width: 50%;
+      ${({ percentage }) =>
+        percentage &&
+        css`
+          width: ${percentage}%;
+        `};
       border-radius: 80px;
+      position: absolute;
+      height: 8px;
+      top: 0;
+      left: 0;
     }
   }
 

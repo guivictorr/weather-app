@@ -1,22 +1,26 @@
 import React from 'react';
 
-import { Container } from './styles';
+import { ProgressContainer } from './styles';
 
-const Progress: React.FC = () => {
+interface ProgressProps {
+  percentage: number;
+}
+
+const Progress: React.FC<ProgressProps> = ({ percentage }) => {
   return (
-    <Container>
+    <ProgressContainer percentage={percentage}>
       <header>
-        <p>0</p>
-        <p>50</p>
-        <p>100</p>
+        <span>0</span>
+        <span>50</span>
+        <span>100</span>
       </header>
       <main>
-        <div />
+        <div> </div>
       </main>
       <footer>
-        <p>%</p>
+        <span>%</span>
       </footer>
-    </Container>
+    </ProgressContainer>
   );
 };
 
