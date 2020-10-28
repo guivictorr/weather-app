@@ -7,6 +7,7 @@ import SideBar from '../../components/SideBar';
 
 import { Container, CardList, Highlights, Wrapper } from './styles';
 import Card from '../../components/Card';
+import Progress from '../../components/Progress';
 
 const Home: React.FC = () => {
   const {
