@@ -17,6 +17,7 @@ const SideBar: React.FC = () => {
     locationsList,
     isCelsius,
     setModalIsOpen,
+    handleGetCurrentLocation,
   } = useContext(WeatherContext);
 
   return (
@@ -25,7 +26,7 @@ const SideBar: React.FC = () => {
         <button type="button" onClick={() => setModalIsOpen(true)}>
           Search for places
         </button>
-        <button type="button">
+        <button type="button" onClick={handleGetCurrentLocation}>
           <BiCurrentLocation color="#E7E7EB" size={25} />
         </button>
       </header>

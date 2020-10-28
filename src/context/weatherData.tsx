@@ -35,6 +35,7 @@ interface ContextProps {
   handleGetWeatherData(woeid: number): Promise<void>;
   handleGetLocationWeather(woeid: number, title: string): Promise<void>;
   setLocationsList(locationsList: LocationDataProps[]): void;
+  handleGetCurrentLocation(): void;
   setModalIsOpen(arg: boolean): void;
 }
 
@@ -45,12 +46,7 @@ export const ContextProvider: React.FC = ({ children }) => {
   const [isCelsius, setIsCelsius] = useState(false);
   const [weatherData, setWeatherData] = useState<WeatherDataProps[]>([]);
   const [todayWeatherData, setTodayWeatherData] = useState<WeatherDataProps>();
-  const [locationsList, setLocationsList] = useState<LocationDataProps[]>([
-    {
-      title: 'San Francisco',
-      woeid: 2487956,
-    },
-  ]);
+  const [locationsList, setLocationsList] = useState<LocationDataProps[]>([]);
 
   const handleGetWeatherData = useCallback(async (woeid: number) => {
     const { data } = await api.get(`location/${woeid}`);
@@ -83,11 +79,31 @@ export const ContextProvider: React.FC = ({ children }) => {
     [handleGetWeatherData],
   );
 
+  const handleGetPosition = useCallback(
+    async position => {
+      const { latitude, longitude } = await position.coords;
+      const { data } = await api.get(
+        `location/search/?lattlong=${latitude},${longitude}`,
+      );
+      setLocationsList(data);
+      handleGetWeatherData(data[0].woeid);
+    },
+    [handleGetWeatherData],
+  );
+
+  const handleGetCurrentLocation = useCallback(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(handleGetPosition);
+    } else {
+      console.log('Geolocation is not supported by this browser.');
+    }
+  }, [handleGetPosition]);
+
   useEffect(() => {
-    handleGetWeatherData(locationsList[0].woeid);
+    handleGetCurrentLocation();
   }, []);
 
-  if (!weatherData || !todayWeatherData) {
+  if (!weatherData || !todayWeatherData || !locationsList[0]) {
     return <Loading />;
   }
 
@@ -101,6 +117,7 @@ export const ContextProvider: React.FC = ({ children }) => {
         isCelsius,
         handleGetWeatherData,
         handleGetLocationWeather,
+        handleGetCurrentLocation,
         setLocationsList,
         setModalIsOpen,
         setIsCelsius,
