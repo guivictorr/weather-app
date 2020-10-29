@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const CardContainer = styled.div`
   height: 180px;
   width: 125px;
   display: flex;

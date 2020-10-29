@@ -4,7 +4,7 @@ import formatDate from '../../utils/formatDate';
 import weatherImg from '../../utils/weatherImages';
 import { WeatherContext } from '../../context/weatherData';
 
-import { Container } from './styles';
+import { CardContainer } from './styles';
 
 interface CardProps {
   applicable_date: string;
@@ -26,14 +26,14 @@ const Card: React.FC<CardProps> = ({
   const { isCelsius } = useContext(WeatherContext);
 
   return (
-    <Container>
+    <CardContainer>
       <p>{formatDate(applicable_date)}</p>
       <img src={weatherImg[weather_state_abbr]} alt="Imagem do Clima" />
       <footer>
         <p>{isCelsius ? `${max_temp_f}ºF` : `${max_temp}ºC`}</p>
         <p>{isCelsius ? `${min_temp_f}ºF` : `${min_temp}ºC`}</p>
       </footer>
-    </Container>
+    </CardContainer>
   );
 };
 

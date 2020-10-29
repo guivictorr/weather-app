@@ -4,7 +4,7 @@ interface SearchModalProps {
   error: boolean;
 }
 
-export const Container = styled.aside<SearchModalProps>`
+export const SearchModalContainer = styled.aside<SearchModalProps>`
   background: #1e213a;
   width: 460px;
   height: 100%;

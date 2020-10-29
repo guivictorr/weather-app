@@ -19,7 +19,7 @@ export const CardList = styled.section`
 export const Highlights = styled.section`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  gap: 45px;
   width: 100%;
 
   article {
@@ -74,7 +74,6 @@ export const Wrapper = styled.div<HeaderButtonProps>`
     justify-content: space-between;
     flex-direction: column;
     height: 90%;
-    width: 700px;
 
     header {
       display: flex;

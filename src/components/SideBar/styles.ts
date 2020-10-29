@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 
-export const Container = styled.aside`
+export const SideBarContainer = styled.aside`
   background: #1e213a;
   width: 460px;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

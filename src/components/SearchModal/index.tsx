@@ -3,7 +3,7 @@ import { IoMdSearch } from 'react-icons/io';
 import { CgClose } from 'react-icons/cg';
 import { WeatherContext } from '../../context/weatherData';
 
-import { Container } from './styles';
+import { SearchModalContainer } from './styles';
 
 import api from '../../service/api';
 
@@ -36,7 +36,7 @@ const SearchModal: React.FC = () => {
   );
 
   return (
-    <Container error={error}>
+    <SearchModalContainer error={error}>
       <header>
         <button
           type="button"
@@ -71,7 +71,7 @@ const SearchModal: React.FC = () => {
           </li>
         ))}
       </ul>
-    </Container>
+    </SearchModalContainer>
   );
 };
 

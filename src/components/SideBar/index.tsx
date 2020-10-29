@@ -7,7 +7,7 @@ import { WeatherContext } from '../../context/weatherData';
 import weatherImg from '../../utils/weatherImages';
 import formatDate from '../../utils/formatDate';
 
-import { Container } from './styles';
+import { SideBarContainer } from './styles';
 
 import CloudBackground from '../../assets/images/Cloud-background.png';
 
@@ -21,7 +21,7 @@ const SideBar: React.FC = () => {
   } = useContext(WeatherContext);
 
   return (
-    <Container>
+    <SideBarContainer>
       <header>
         <button type="button" onClick={() => setModalIsOpen(true)}>
           Search for places
@@ -53,7 +53,7 @@ const SideBar: React.FC = () => {
           {locationsList[0].title}
         </p>
       </footer>
-    </Container>
+    </SideBarContainer>
   );
 };
 

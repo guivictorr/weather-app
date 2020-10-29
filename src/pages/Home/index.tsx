@@ -29,7 +29,7 @@ const Home: React.FC = () => {
 
       <Wrapper isCelsius={isCelsius}>
         <main>
-          <header>
+          <header className="main-header">
             <button type="button" onClick={() => setIsCelsius(false)}>
               ºC
             </button>
