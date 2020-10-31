@@ -107,4 +107,14 @@ export default createGlobalStyle`
       width: auto;
     }
   }
+
+  @media (max-height: 750px) {
+    div${Container} {
+      height: 100%;
+
+      .devchallenges-footer {
+        margin-top: 50px;
+      }
+    }
+  }
 `;
