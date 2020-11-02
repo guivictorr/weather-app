@@ -52,6 +52,10 @@ export const SideBarContainer = styled.aside`
       align-items: center;
       flex: 1;
 
+      img {
+        object-fit: contain;
+      }
+
       img + img {
         position: absolute;
         width: 650px;

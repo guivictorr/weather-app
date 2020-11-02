@@ -21,7 +21,7 @@ export const ProgressContainer = styled.div<ProgressProps>`
     color: #a09fb1;
   }
 
-  main {
+  .progress-container {
     background: #e7e7eb;
     border-radius: 80px;
     width: 100%;

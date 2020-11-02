@@ -14,7 +14,7 @@ const Progress: React.FC<ProgressProps> = ({ percentage }) => {
         <span>50</span>
         <span>100</span>
       </header>
-      <main>
+      <main className="progress-container">
         <div> </div>
       </main>
       <footer>
