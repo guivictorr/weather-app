@@ -40,8 +40,3 @@ yarn start
 - Faça push para a sua branch: `git push origin minha-feature`.
 
 Depois que o merge da sua pull request for feito, você pode deletar a sua branch.
-
-## 📝 Licença
-
-Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](https://github.com/guivictorr/weather-app/blob/master/LICENSE) para mais detalhes.
- 
